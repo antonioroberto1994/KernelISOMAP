@@ -29,4 +29,4 @@ if __name__ == '__main__':
 
 ## License
 
-This project is licensed under the GNU GENERAL PUBLIC LICENSE - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the GNU GENERAL PUBLIC LICENSE - see the [LICENSE.md](https://github.com/antonioroberto1994/KernelISOMAP/blob/master/LICENSE) file for details
