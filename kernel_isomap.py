@@ -1,3 +1,8 @@
+"""Isomap for manifold learning"""
+
+# Author: Antonio Roberto -- <https://github.com/antonioroberto1994>
+# License: GNU General Public License v3.0
+
 import numpy as np
 from sklearn.manifold import Isomap
 import sklearn
@@ -9,20 +14,65 @@ from sklearn.decomposition import KernelPCA
 from sklearn.preprocessing import KernelCenterer
 from sklearn.metrics.pairwise import rbf_kernel
 
-# Posso implementare anche ISOMAP con radius che non c'è
-
-
 def myRBF(X, Y=None, gamma=None):
+    '''
+Support method for RBF distance.
+    '''
     X1 = np.array([X])
     Y1 = Y if Y is None else np.array([Y])
     return rbf_kernel(X1, Y1, gamma=gamma)[0]
 
 
 class KernelIsomap(Isomap):
+    """Isomap Embedding
+    
+    Non-linear dimensionality reduction through Isometric Mapping.
+    The algorithm uses a kernelized (RBF - Radial Basis Function) distance measure.
+
+    Parameters
+    ----------
+    n_neighbors : integer
+        number of neighbors to consider for each point.
+    n_components : integer
+        number of coordinates for the manifold
+    gamma : float, default None
+        If None, defaults to 1.0 / n_features
+    eigen_solver : ['auto'|'arpack'|'dense']
+        'auto' : Attempt to choose the most efficient solver
+        for the given problem.
+        'arpack' : Use Arnoldi decomposition to find the eigenvalues
+        and eigenvectors.
+        'dense' : Use a direct solver (i.e. LAPACK)
+        for the eigenvalue decomposition.
+    tol : float
+        Convergence tolerance passed to arpack or lobpcg.
+        not used if eigen_solver == 'dense'.
+    max_iter : integer
+        Maximum number of iterations for the arpack solver.
+        not used if eigen_solver == 'dense'.
+    path_method : string ['auto'|'FW'|'D']
+        Method to use in finding shortest path.
+        'auto' : attempt to choose the best algorithm automatically.
+        'FW' : Floyd-Warshall algorithm.
+        'D' : Dijkstra's algorithm.
+    neighbors_algorithm : string ['auto'|'brute'|'kd_tree'|'ball_tree']
+        Algorithm to use for nearest neighbors search,
+        passed to neighbors.NearestNeighbors instance.
+    n_jobs : int or None, optional (default=None)
+        The number of parallel jobs to run.
+        ``None`` means 1 unless in a :obj:`joblib.parallel_backend` context.
+        ``-1`` means using all processors. See :term:`Glossary <n_jobs>`
+        for more details.
+
+    References
+    ----------
+    .. [1] Tenenbaum, J.B.; De Silva, V.; & Langford, J.C. A global geometric
+           framework for nonlinear dimensionality reduction. Science 290 (5500)
+    """
     def __init__(self, n_neighbors=2, n_components=2, gamma=None, eigen_solver='auto',
                  tol=0, max_iter=None, path_method='auto',
                  neighbors_algorithm='auto', n_jobs=None):
-        self.gamma_ = gamma  # da usare in metric parameters per NN e graph
+        self.gamma_ = gamma 
         super().__init__(n_neighbors=n_neighbors, n_components=n_components, eigen_solver=eigen_solver,
                          tol=tol, max_iter=max_iter, path_method=path_method,
                          neighbors_algorithm=neighbors_algorithm, n_jobs=n_jobs)
@@ -53,11 +103,3 @@ class KernelIsomap(Isomap):
         G *= -0.5
 
         self.embedding_ = self.kernel_pca_.fit_transform(G)
-
-
-if __name__ == '__main__':
-    from sklearn.datasets import load_digits
-    digits = load_digits(n_class=6)
-    X = digits.data
-    X_embedded = KernelIsomap(n_jobs=-1).fit_transform(X)
-    print(X_embedded.shape)
