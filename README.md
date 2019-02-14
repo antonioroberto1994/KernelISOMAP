@@ -1,6 +1,6 @@
 # Kernel ISOMAP
 
-A RBF-Kernelized version of ISOMAP (Isometric Mapping). A description of the algorithm can be found [here](https://scikit-learn.org/stable/modules/manifold.html#isomap).
+An RBF-Kernelized version of ISOMAP (Isometric Mapping). A description of the algorithm can be found [here](https://scikit-learn.org/stable/modules/manifold.html#isomap).
 
 ## Prerequisites
 
